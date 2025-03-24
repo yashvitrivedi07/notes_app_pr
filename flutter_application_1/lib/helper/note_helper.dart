@@ -62,17 +62,25 @@ class NoteHelper {
   }
 
   Future<int?> updateData(NoteModal modal) async {
+  if (database == null) await initDataBase();
+
+  String q =
+      "UPDATE $tableName SET $noteTitle = ?, $noteDescription = ?, $noteDate = ?, $noteTime = ? WHERE $noteId = ?";
+  List v = [
+    modal.title,
+    modal.description,
+    modal.date,
+    modal.time,
+    modal.id, 
+  ];
+
+  return await database?.rawUpdate(q, v);
+}
+
+  Future<int?> deletedata(int id) async {
     if (database == null) await initDataBase();
-
-    String q =
-        "UPDATE $tableName SET $noteTitle = ?, $noteDescription = ?, $noteDate = ?, $noteTime = ? WHERE $noteId = ${modal.id}";
-    List v = [
-      modal.title,
-      modal.description,
-      modal.date,
-      modal.time,
-    ];
-
-    return await database?.rawUpdate(q, v);
+    String q = "DELETE FROM $tableName WHERE $noteId = $id";
+    return await database?.rawDelete(q);
   }
+
 }

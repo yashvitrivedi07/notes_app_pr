@@ -29,4 +29,17 @@ class NoteServices extends GetxController {
     }
     update();
   }
+
+  Future<void> deleteNotes({required int id})
+  async {
+    int? res = await NoteHelper.nh.deletedata(id);
+    if(res!= null)
+      {
+        getNotes();
+        Get.snackbar("Delete", "Deleted...",backgroundColor: Colors.red);
+      }else {
+      Get.snackbar("failed", "try again...");
+    }
+    update();
+  }
 }

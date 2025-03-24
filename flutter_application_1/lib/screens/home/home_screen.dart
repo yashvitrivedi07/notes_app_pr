@@ -28,7 +28,7 @@ class HomeScreen extends StatelessWidget {
       ),
       body: GetBuilder<NoteServices>(
         builder: (controller) {
-          return FutureBuilder(
+          return FutureBuilder<List<NoteModal>>(
             future: controller.modal,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -49,58 +49,63 @@ class HomeScreen extends StatelessWidget {
                 itemCount: data.length,
                 itemBuilder: (context, index) {
                   return ListTile(
+                    trailing: IconButton(onPressed: () {
+                      ns.deleteNotes(id: data[index].id!);
+                    }, icon: Icon(Icons.delete,color: Colors.red,)),
+                    title: Text(data[index].title!),
+                    subtitle: Text(data[index].description!),
                     onTap: () {
+                      // Pre-fill update fields
+                      utitleController.text = data[index].title!;
+                      udescController.text = data[index].description!;
+                      udateController.text = data[index].date!;
+                      utimeController.text = data[index].time!;
+
                       Get.dialog(AlertDialog(
+                        title: Text("Update Note"),
                         content: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             TextField(
                               controller: utitleController,
-                              decoration: InputDecoration(
-                                hintText: "Title",
-                              ),
+                              decoration: InputDecoration(hintText: "Title"),
                             ),
                             TextField(
                               controller: udescController,
-                              decoration: InputDecoration(
-                                hintText: "Description",
-                              ),
+                              decoration: InputDecoration(hintText: "Description"),
                             ),
                             TextField(
                               controller: udateController,
-                              decoration: InputDecoration(
-                                hintText: "Date",
-                              ),
+                              decoration: InputDecoration(hintText: "Date"),
                             ),
                             TextField(
                               controller: utimeController,
-                              decoration: InputDecoration(
-                                hintText: "Time",
-                              ),
+                              decoration: InputDecoration(hintText: "Time"),
                             ),
                           ],
                         ),
                         actions: [
                           ElevatedButton(
-                              onPressed: () {
-                                Get.back();
-                              },
-                              child: Text("Back")),
+                            onPressed: () => Get.back(),
+                            child: Text("Back"),
+                          ),
                           ElevatedButton(
-                              onPressed: () {
-                                Get.back();
-                                NoteModal modal = NoteModal(
-                                  date: udateController.text,
-                                  description: udescController.text,
-                                  time: utimeController.text,
-                                  title: utitleController.text,
-                                );
-                                ns.updateNotes(modal);
-                              },
-                              child: Text("Update")),
+                            onPressed: () {
+                              Get.back();
+                              NoteModal modal = NoteModal(
+                                id: data[index].id, // Ensure correct ID is passed
+                                title: utitleController.text,
+                                description: udescController.text,
+                                date: udateController.text,
+                                time: utimeController.text,
+                              );
+                              ns.updateNotes(modal);
+                            },
+                            child: Text("Update"),
+                          ),
                         ],
                       ));
                     },
-                    title: Text("${data[index].title}"),
                   );
                 },
               );
@@ -110,62 +115,57 @@ class HomeScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.bottomSheet(BottomSheet(
-            onClosing: () {},
-            builder: (context) {
-              return Column(
-                children: [
-                  TextField(
-                    controller: titleController,
-                    decoration: InputDecoration(
-                      hintText: "Title",
+          Get.bottomSheet(Container(
+            padding: EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  controller: titleController,
+                  decoration: InputDecoration(hintText: "Title"),
+                ),
+                TextField(
+                  controller: descController,
+                  decoration: InputDecoration(hintText: "Description"),
+                ),
+                TextField(
+                  controller: dateController,
+                  decoration: InputDecoration(hintText: "Date"),
+                ),
+                TextField(
+                  controller: timeController,
+                  decoration: InputDecoration(hintText: "Time"),
+                ),
+                SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Get.back(),
+                      child: Text("Cancel"),
                     ),
-                  ),
-                  TextField(
-                    controller: descController,
-                    decoration: InputDecoration(
-                      hintText: "Description",
+                    ElevatedButton(
+                      onPressed: () {
+                        Get.back();
+                        NoteModal modal = NoteModal(
+                          id: 0, // ID will be auto-generated in the database
+                          title: titleController.text,
+                          description: descController.text,
+                          date: dateController.text,
+                          time: timeController.text,
+                        );
+                        ns.addNotes(modal);
+                      },
+                      child: Text("Add"),
                     ),
-                  ),
-                  TextField(
-                    controller: dateController,
-                    decoration: InputDecoration(
-                      hintText: "Date",
-                    ),
-                  ),
-                  TextField(
-                    controller: timeController,
-                    decoration: InputDecoration(
-                      hintText: "Time",
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          Get.back();
-                        },
-                        child: Text("Cancel"),
-                      ),
-                      ElevatedButton(
-                        onPressed: () {
-                          Get.back();
-                          NoteModal modal = NoteModal(
-                            id: 0,
-                            date: dateController.text,
-                            description: descController.text,
-                            time: timeController.text,
-                            title: titleController.text,
-                          );
-                          ns.addNotes(modal);
-                        },
-                        child: Text("Add"),
-                      ),
-                    ],
-                  ),
-                ],
-              );
-            },
+                  ],
+                ),
+              ],
+            ),
           ));
         },
         child: Icon(Icons.add),
