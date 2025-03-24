@@ -53,12 +53,15 @@ class NoteHelper {
 
   Future<List<NoteModal>> fetchData() async {
     await initDataBase();
-    String q = "SELECT * FROM $tableName ";
-    List<Map<String, dynamic>> res = await database?.rawQuery(q) ?? [];
-    return res.map((e) => NoteModal.toModel(e)).toList();
+    List<Map<String, Object?>>? data = await database?.query(tableName);
+    return data!
+        .map(
+          (e) => NoteModal.toModel(e),
+        )
+        .toList();
   }
 
-  Future<int?> updateExpense(NoteModal modal) async {
+  Future<int?> updateData(NoteModal modal) async {
     if (database == null) await initDataBase();
 
     String q =

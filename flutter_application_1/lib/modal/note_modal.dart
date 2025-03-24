@@ -1,5 +1,6 @@
 class NoteModal {
-  String? date, time, title, description, id;
+  String? date, time, title, description;
+  int? id;
 
   NoteModal({this.date, this.description, this.time, this.title, this.id});
 
