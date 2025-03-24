@@ -32,7 +32,7 @@ class NoteServices extends GetxController {
 
   Future<void> deleteNotes({required int id})
   async {
-    int? res = await NoteHelper.nh.deletedata(id);
+    int? res = await NoteHelper.nh.deleteData(id);
     if(res!= null)
       {
         getNotes();

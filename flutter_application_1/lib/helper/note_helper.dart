@@ -77,7 +77,7 @@ class NoteHelper {
   return await database?.rawUpdate(q, v);
 }
 
-  Future<int?> deletedata(int id) async {
+  Future<int?> deleteData(int id) async {
     if (database == null) await initDataBase();
     String q = "DELETE FROM $tableName WHERE $noteId = $id";
     return await database?.rawDelete(q);

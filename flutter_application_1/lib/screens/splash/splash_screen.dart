@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(Duration(seconds: 2), () {
+    Timer(Duration(seconds: 3), () {
       Get.offNamed('/home');
     });
   }
@@ -23,9 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text("Welcome to the Splash Screen!"),
-      ),
+      body: Transform.rotate(angle: 0.4,child: Image.asset('assets/images/vecteezy_3d-rendering-yellow-notepad-isolated-on-transparent-background_48693415-removebg-preview.png',height: 800.h,))
     );
   }
 }
