@@ -19,15 +19,6 @@ The **Notes App** is a simple and efficient note-taking application built with *
 - **Flutter ScreenUtil** – Responsive UI design  
 - **Flutter Staggered Grid View** – For better note arrangement  
 
-## 📦 Dependencies  
-```yaml
-dependencies:
-  cupertino_icons: ^1.0.8
-  get: ^4.7.2
-  flutter_screenutil: ^5.9.3
-  sqflite: ^2.4.1
-  flutter_staggered_grid_view: ^0.7.0
-
 
 <img src = "https://github.com/user-attachments/assets/4ee67950-a905-41d3-b3c4-27b00339c941" width = "250">
 <img src = "https://github.com/user-attachments/assets/2cbaaaa2-ee55-4fee-af4e-ae85c14e1de7" width = "250">
